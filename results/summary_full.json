@@ -1,0 +1,8 @@
+{
+  "name": "full",
+  "episodes_run": 415,
+  "solved_episode": 415,
+  "best_moving_avg": 200.38492297200253,
+  "final_moving_avg": 200.38492297200253,
+  "eval_greedy_mean_20ep": 242.07542915825638
+}

@@ -1,0 +1,4 @@
+config,episódios,resolvido_em,melhor_média100,média100_final,avaliação_greedy_20ep
+full,473,473.0,201.0,201.0,243.5
+no_target,700,,182.0,110.7,247.3
+no_replay,700,,38.0,11.1,52.7

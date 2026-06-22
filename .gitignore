@@ -1,0 +1,29 @@
+# Ambiente virtual (1.4 GB — nunca versionar; recriável via requirements.txt)
+.venv/
+venv/
+env/
+ENV/
+
+# Caches de Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Logs de treinamento (recriáveis)
+results/logs/
+*.log
+
+# Arquivos de SO / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Mantidos no repositório (NÃO ignorados), pois fazem parte da entrega:
+#   dqn_lunar_lander.ipynb, README.md, requirements.txt, src/,
+#   results/*.csv, results/*.png, results/*.pt

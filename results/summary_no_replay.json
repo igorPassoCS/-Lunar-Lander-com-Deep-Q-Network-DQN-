@@ -1,0 +1,8 @@
+{
+  "name": "no_replay",
+  "episodes_run": 700,
+  "solved_episode": null,
+  "best_moving_avg": 38.03843755239285,
+  "final_moving_avg": 11.11315627898537,
+  "eval_greedy_mean_20ep": 52.69015256260345
+}

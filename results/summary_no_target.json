@@ -1,0 +1,8 @@
+{
+  "name": "no_target",
+  "episodes_run": 700,
+  "solved_episode": null,
+  "best_moving_avg": 194.2420509918095,
+  "final_moving_avg": 169.1989431136478,
+  "eval_greedy_mean_20ep": 227.76221939481235
+}
