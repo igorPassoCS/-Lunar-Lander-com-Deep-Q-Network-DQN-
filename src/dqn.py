@@ -1,9 +1,9 @@
 """
-Deep Q-Network (DQN) para o ambiente LunarLander-v3 — implementado do zero.
+Deep Q-Network (DQN) para o ambiente LunarLander-v3, implementado do zero.
 
 Nenhuma biblioteca de RL pronta (stable-baselines3, RLlib, keras-rl, ...) é usada:
-o Gymnasium entra APENAS como simulador do ambiente. Todo o algoritmo — replay
-buffer, target network, erro de Bellman, otimização — é escrito manualmente aqui
+o Gymnasium entra APENAS como simulador do ambiente. Todo o algoritmo (replay
+buffer, target network, erro de Bellman, otimização) é escrito manualmente aqui
 usando somente PyTorch para a rede neural.
 
 O módulo é parametrizável para permitir as ablações do experimento comparativo:
@@ -33,8 +33,8 @@ def set_seed(seed: int) -> None:
     Necessário porque inicialização dos pesos, amostragem do replay, exploração
     epsilon-greedy e a dinâmica do ambiente são estocásticas. Sem seed fixa as
     curvas de aprendizado não são reproduzíveis e a comparação entre as
-    configurações (item 3) ficaria injusta — diferenças poderiam vir do acaso e
-    não do componente que estamos isolando.
+    configurações (item 3) ficaria injusta: diferenças poderiam vir do acaso e
+    não do componente que estou isolando.
     """
     random.seed(seed)
     np.random.seed(seed)
@@ -43,7 +43,7 @@ def set_seed(seed: int) -> None:
 
 
 # --------------------------------------------------------------------------- #
-# 1) Rede Q: aproxima Q(s, a) — substitui a tabela do Q-learning tabular
+# 1) Rede Q: aproxima Q(s, a), substituindo a tabela do Q-learning tabular
 # --------------------------------------------------------------------------- #
 class QNetwork(nn.Module):
     """MLP que mapeia um estado (8 dims) para os Q-valores das 4 ações.
@@ -282,7 +282,7 @@ def save_result(res: TrainResult, results_dir: str) -> str:
 
 
 def evaluate(agent: DQNAgent, n_episodes: int = 10, seed: int = 123) -> float:
-    """Avalia a política greedy (eps=0) — mede o desempenho real aprendido."""
+    """Avalia a política greedy (eps=0): mede o desempenho real aprendido."""
     import gymnasium as gym
 
     env = gym.make("LunarLander-v3")

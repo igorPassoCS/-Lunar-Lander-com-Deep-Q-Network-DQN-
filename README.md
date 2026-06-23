@@ -1,14 +1,24 @@
-# Deep Q-Network (DQN) — Lunar Lander
+# Deep Q-Network (DQN): Lunar Lander
 
 Implementação **individual e do zero** de um agente Deep Q-Network para o ambiente
 `LunarLander-v3` do [Gymnasium](https://gymnasium.farama.org/). O Gymnasium é usado
 **apenas como simulador** do ambiente; **todo o algoritmo de RL** (rede Q, experience
-replay, target network, erro de Bellman e otimização) é escrito manualmente — nenhuma
+replay, target network, erro de Bellman e otimização) é escrito manualmente, e nenhuma
 biblioteca de RL pronta (stable-baselines3, RLlib, keras-rl, Tianshou, ...) é utilizada.
 
-- **Notebook (entrega principal):** [`dqn_lunar_lander.ipynb`](dqn_lunar_lander.ipynb) — implementação, experimentos e curvas, com saídas já executadas.
+- **Notebook (entrega principal):** [`dqn_lunar_lander.ipynb`](dqn_lunar_lander.ipynb), com implementação, experimentos e curvas e saídas já executadas.
 - **Código-fonte espelhado:** [`src/dqn.py`](src/dqn.py) (módulo) e [`src/run_experiments.py`](src/run_experiments.py) (runner usado para treinar em paralelo).
 - **Resultados:** pasta [`results/`](results/) (CSVs de métricas, gráficos `.png`, pesos `.pt`).
+
+## 🎥 Vídeo explicativo
+
+Vídeo percorrendo o ambiente, as decisões de arquitetura, o papel do experience
+replay e da target network, e a análise comparativa das configurações:
+
+**▶️ [Assistir no YouTube](COLE_AQUI_O_LINK_DO_YOUTUBE)**
+
+> 💡 Dica: o vídeo é objetivo, mas se quiser acelerar, no YouTube basta **manter a tecla
+> espaço pressionada** durante a reprodução para assistir em 2x.
 
 ## Como reproduzir
 
@@ -89,19 +99,19 @@ econômica em combustível, e a finalizar tocando as duas pernas sem bater.
 - **Limite de passos (truncamento):** atingidos os 1000 passos do `TimeLimit` sem terminar →
   `truncated=True`.
 
-No código distinguimos os dois sinais: `done = terminated or truncated` encerra o laço, mas
+No código distingo os dois sinais: `done = terminated or truncated` encerra o laço, mas
 **apenas `terminated` zera o bootstrap de Bellman** (o truncamento por tempo não significa
 estado terminal real, então o valor futuro continua válido).
 
 ## (e) O que é "pousar com sucesso" e critério de aprendizado
 
 Um pouso bem-sucedido é o módulo **repousar sobre a plataforma com as duas pernas em
-contato, em baixa velocidade e nivelado**, sem colidir — episódio que rende o bônus de
+contato, em baixa velocidade e nivelado**, sem colidir, um episódio que rende o bônus de
 +100 e termina com recompensa alta.
 
 O critério padrão de desempenho do ambiente é considerá-lo **"resolvido" quando a média da
-recompensa dos últimos 100 episódios consecutivos ≥ 200**. Usamos essa média móvel de 100
-como métrica de convergência e, ao final, avaliamos a **política greedy (ε = 0)** em 20
+recompensa dos últimos 100 episódios consecutivos ≥ 200**. Uso essa média móvel de 100
+como métrica de convergência e, ao final, avalio a **política greedy (ε = 0)** em 20
 episódios novos para medir o desempenho real aprendido (sem exploração aleatória).
 
 ## (f) Por que métodos tabulares não resolvem o Lunar Lander
@@ -114,7 +124,7 @@ discretização sofreria com a **maldição da dimensionalidade** (o número de 
 exponencialmente com as 8 dimensões) e nunca veria a maioria dos estados.
 
 A solução é **aproximação de função**: uma rede neural parametrizada `Q(s, a; θ)` que
-**generaliza** — aprende uma função suave do estado contínuo para os Q-valores e produz
+**generaliza**: aprende uma função suave do estado contínuo para os Q-valores e produz
 estimativas razoáveis até para estados nunca visitados. É exatamente o papel do DQN.
 
 ---
@@ -133,7 +143,7 @@ entrada (8)  →  Linear(8, 128)  → ReLU
 
 - **Dimensão de entrada = 8**: coerente com as 8 variáveis de estado do Lunar Lander.
 - **Dimensão de saída = 4**: um Q-valor por ação discreta (arquitetura padrão do DQN, que
-  produz todos os `Q(s, ·)` numa só passada — eficiente para o `max` e o `argmax`).
+  produz todos os `Q(s, ·)` numa só passada, eficiente para o `max` e o `argmax`).
 - **Duas camadas ocultas de 128 neurônios**: capacidade suficiente para aproximar uma
   função suave de ℝ⁸ → ℝ⁴ sem inflar parâmetros nem favorecer overfitting; é a configuração
   consagrada para este ambiente.
@@ -146,7 +156,7 @@ entrada (8)  →  Linear(8, 128)  → ReLU
 
 ### Seed fixada e por que ela é necessária
 
-Fixamos `SEED = 42` em `random`, `numpy`, `torch` e no ambiente
+Fixo `SEED = 42` em `random`, `numpy`, `torch` e no ambiente
 (`env.reset(seed=...)` + `env.action_space.seed(...)`). Várias etapas do DQN são
 **estocásticas**: a inicialização dos pesos da rede, a amostragem aleatória do experience
 replay, a exploração ε-greedy e a própria dinâmica/condição inicial do ambiente. Sem uma
@@ -154,7 +164,7 @@ seed fixa, **duas execuções do mesmo código produzem curvas diferentes**, o q
 reproduzir os resultados relatados e (ii) **invalida a comparação do item 3**: uma diferença
 entre "com" e "sem" um componente poderia ser fruto do acaso, e não do componente isolado.
 Com a seed fixa, todas as configurações partem das mesmas condições e a diferença observada
-é atribuível ao fator que mudamos.
+é atribuível ao fator que mudei.
 
 ## (b) Loop de treinamento implementado do zero
 
@@ -172,10 +182,10 @@ O laço (`train()`) é escrito manualmente, sem abstração externa:
 
 **Experience Replay** (`ReplayBuffer`, capacidade 100k, lotes de 64):
 - *O que resolve:* (i) a **correlação temporal** entre transições consecutivas, que viola a
-  hipótese i.i.d. do gradiente estocástico, e (ii) a **baixa eficiência amostral** — cada
+  hipótese i.i.d. do gradiente estocástico, e (ii) a **baixa eficiência amostral**: cada
   transição é reaproveitada em vários updates.
 - *Sem ele:* o agente treina apenas na transição mais recente, com amostras altamente
-  correlacionadas, sofrendo **esquecimento catastrófico** e oscilação — como mostra o
+  correlacionadas, sofrendo **esquecimento catastrófico** e oscilação, como mostra o
   experimento `no_replay`.
 
 **Target Network** (cópia "congelada" atualizada por *soft update* de Polyak, τ = 5e-3):
@@ -183,7 +193,7 @@ O laço (`train()`) é escrito manualmente, sem abstração externa:
   mesma rede que está sendo treinada, ele se moveria a cada passo "perseguindo" a própria
   estimativa, gerando um laço de realimentação instável.
 - *Sem ela:* os Q-valores **oscilam e podem divergir**; o treino fica menos estável e a
-  convergência é mais difícil de sustentar — como mostra o experimento `no_target`.
+  convergência é mais difícil de sustentar, como mostra o experimento `no_target`.
 
 ---
 
@@ -223,12 +233,12 @@ Resultados quantitativos (`results/summary.csv`):
 
 **DQN completo (`full`)** é a única configuração que **resolve** o ambiente, cruzando a
 média de 200 no episódio **473** e confirmando o aprendizado na avaliação greedy
-(**243,5**, bem acima do limiar). A curva sobe de forma consistente e **estável** — os dois
+(**243,5**, bem acima do limiar). A curva sobe de forma consistente e **estável**, pois os dois
 componentes trabalham juntos: o replay fornece lotes descorrelacionados e o target network
 mantém o alvo de Bellman estável enquanto a rede aprende.
 
 **Sem target network (`no_target`)** é o caso mais instrutivo da **instabilidade**: o agente
-chega a aprender (melhor média móvel **182**), mas **não sustenta** o desempenho — a média de
+chega a aprender (melhor média móvel **182**), mas **não sustenta** o desempenho: a média de
 100 episódios **oscila e regride fortemente, caindo de 182 para 110,7 no final**, sem nunca
 cruzar os 200 de forma consistente. Essa é a assinatura do **alvo móvel**: como o alvo de
 Bellman é recalculado pela mesma rede que está sendo otimizada, pequenos erros se realimentam
@@ -241,14 +251,14 @@ abaixo do critério. Sem uma rede-alvo dedicada, o treino não estabiliza.
 **Sem experience replay (`no_replay`)** é o caso mais severo: treinar apenas na transição
 mais recente deixa as amostras **fortemente correlacionadas** e impede o **reuso** de
 experiência. O resultado é um aprendizado **lento, ruidoso e que não converge** (melhor
-média **38**, final **11,1**, avaliação greedy **52,7**) — fica muito longe dos 200. Confirma
+média **38**, final **11,1**, avaliação greedy **52,7**), fica muito longe dos 200. Confirma
 que o experience replay é, das duas peças, a **mais crítica** para viabilizar o DQN neste
 ambiente: sem ele o agente sequer se aproxima de uma política competente.
 
 **Conclusão.** Os experimentos confirmam o papel de cada componente: o **experience replay
 é decisivo** para que o DQN aprenda (descorrelaciona e reaproveita amostras), e o **target
 network é decisivo para a estabilidade e a convergência sustentada** (elimina o alvo móvel).
-O DQN completo — combinando os dois — é o único que aprende uma política de pouso confiável.
+O DQN completo, combinando os dois, é o único que aprende uma política de pouso confiável.
 
 ---
 
@@ -258,7 +268,7 @@ O DQN completo — combinando os dois — é o único que aprende uma política 
 .
 ├── README.md                   # este arquivo (itens 1, 2 e 3 em prosa)
 ├── requirements.txt            # dependências fixadas
-├── dqn_lunar_lander.ipynb       # NOTEBOOK — implementação + experimentos + curvas (executado)
+├── dqn_lunar_lander.ipynb       # NOTEBOOK: implementação + experimentos + curvas (executado)
 ├── src/
 │   ├── dqn.py                  # implementação do DQN (módulo espelho do notebook)
 │   └── run_experiments.py       # runner para treinar as 3 configs e salvar results/
@@ -271,4 +281,4 @@ O DQN completo — combinando os dois — é o único que aprende uma política 
 
 ## Fora de escopo
 - Vídeo explicativo (gravação do aluno; este README e o notebook servem de roteiro).
-- Variantes além do DQN baunilha (Double DQN, Dueling DQN, PER) — possíveis trabalhos futuros.
+- Variantes além do DQN baunilha (Double DQN, Dueling DQN, PER), possíveis trabalhos futuros.
