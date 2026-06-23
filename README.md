@@ -15,7 +15,7 @@ biblioteca de RL pronta (stable-baselines3, RLlib, keras-rl, Tianshou, ...) é u
 Vídeo percorrendo o ambiente, as decisões de arquitetura, o papel do experience
 replay e da target network, e a análise comparativa das configurações:
 
-**▶️ [Assistir no YouTube](COLE_AQUI_O_LINK_DO_YOUTUBE)**
+**▶️ [Assistir no YouTube](https://youtu.be/2ETJhQTXtjc?si=ov1gOr3LUY9YA8CH)**
 
 > 💡 Dica: o vídeo é objetivo, mas se quiser acelerar, no YouTube basta **manter a tecla
 > espaço pressionada** durante a reprodução para assistir em 2x.
